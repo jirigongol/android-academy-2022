@@ -35,6 +35,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     MovieDetailScreen(movieDetail = OfflineMoviesProvider.getMovieDetail(1))
+                    
+                    //MoviesList(moviesList = OfflineMoviesProvider.getMovies())
                 }
             }
         }

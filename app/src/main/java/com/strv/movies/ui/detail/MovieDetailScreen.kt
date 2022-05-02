@@ -11,6 +11,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -34,9 +35,16 @@ fun MovieDetailScreen(movieDetail: MovieDetail) {
             videoId = OfflineMoviesProvider.getTrailer(movieDetail.id).key,
             progressSeconds = mutableStateOf(0f)
         )
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+
+            Box(
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .padding(start = 16.dp)
+            ) {
+                MovieInfo(movieDetail = movieDetail)
+            }
             MoviePoster(movieDetail = movieDetail)
-            MovieInfo(movieDetail = movieDetail)
         }
     }
 
@@ -47,22 +55,28 @@ fun MovieInfo(movieDetail: MovieDetail) {
     Column() {
         Text(
             text = movieDetail.title,
-            Modifier.padding(top = 16.dp, end = 16.dp),
+            Modifier
+                .padding(top = 16.dp),
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            color = Color.Green
+
         )
 
         Text(
             text =
             movieDetail.releaseDate,
-            Modifier.padding(top = 8.dp)
+            Modifier.padding(top = 8.dp),
+            color = Color.Green
         )
 
 
         Text(
             text = movieDetail.overview,
-            Modifier.padding(top = 8.dp, end = 16.dp),
+            Modifier
+                .padding(top = 8.dp),
             textAlign = TextAlign.Justify,
+            color = Color.Green
         )
 
     }
