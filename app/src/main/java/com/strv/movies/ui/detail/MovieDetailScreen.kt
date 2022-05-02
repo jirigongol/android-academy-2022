@@ -3,10 +3,8 @@ package com.strv.movies.ui.detail
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.annotation.NonNull
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -36,7 +34,7 @@ fun MovieDetailScreen(movieDetail: MovieDetail) {
             videoId = OfflineMoviesProvider.getTrailer(movieDetail.id).key,
             progressSeconds = mutableStateOf(0f)
         )
-        Row {
+        Row(modifier = Modifier.fillMaxWidth()) {
             MoviePoster(movieDetail = movieDetail)
             MovieInfo(movieDetail = movieDetail)
         }
@@ -46,7 +44,7 @@ fun MovieDetailScreen(movieDetail: MovieDetail) {
 
 @Composable
 fun MovieInfo(movieDetail: MovieDetail) {
-    Column {
+    Column() {
         Text(
             text = movieDetail.title,
             Modifier.padding(top = 16.dp, end = 16.dp),
@@ -63,8 +61,8 @@ fun MovieInfo(movieDetail: MovieDetail) {
 
         Text(
             text = movieDetail.overview,
-            Modifier.padding(top = 8.dp, end = 8.dp),
-            textAlign = TextAlign.Justify
+            Modifier.padding(top = 8.dp, end = 16.dp),
+            textAlign = TextAlign.Justify,
         )
 
     }
