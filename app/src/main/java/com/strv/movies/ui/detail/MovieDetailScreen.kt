@@ -35,15 +35,10 @@ fun MovieDetailScreen(movieDetail: MovieDetail) {
             videoId = OfflineMoviesProvider.getTrailer(movieDetail.id).key,
             progressSeconds = mutableStateOf(0f)
         )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier.fillMaxWidth()) {
 
-            Box(
-                modifier = Modifier
-                    .weight(1f, fill = false)
-                    .padding(start = 16.dp)
-            ) {
-                MovieInfo(movieDetail = movieDetail)
-            }
+            MovieInfo(movieDetail = movieDetail, modifier = Modifier.weight(1f).padding(start = 16.dp))
+
             MoviePoster(movieDetail = movieDetail)
         }
     }
@@ -51,8 +46,8 @@ fun MovieDetailScreen(movieDetail: MovieDetail) {
 }
 
 @Composable
-fun MovieInfo(movieDetail: MovieDetail) {
-    Column() {
+fun MovieInfo(movieDetail: MovieDetail, modifier: Modifier) {
+    Column(modifier = modifier) {
         Text(
             text = movieDetail.title,
             Modifier
