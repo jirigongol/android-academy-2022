@@ -22,3 +22,5 @@ val md_theme_dark_background = Color(0xFF211a19)
 val md_theme_dark_onBackground = Color(0xFFede0de)
 val md_theme_dark_surface = Color(0xFF211a19)
 val md_theme_dark_onSurface = Color(0xFFede0de)
+
+val ghost_white = Color(0xFFF8F8F8)
