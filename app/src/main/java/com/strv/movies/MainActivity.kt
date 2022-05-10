@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.ui.moviedetail.MovieDetail
 import com.strv.movies.ui.movieslist.MoviesList
@@ -31,11 +32,13 @@ import com.strv.movies.ui.theme.MoviesTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             val isSystemDarkTheme = isSystemInDarkTheme()
             val isDarkTheme = remember {
                 mutableStateOf(isSystemDarkTheme)
+
             }
             MoviesTheme(darkTheme = isDarkTheme.value) {
                 // A surface container using the 'background' color from the theme
