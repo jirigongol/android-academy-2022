@@ -4,4 +4,10 @@
 
     <color name="statusBarLightMode">#FF006a60</color>
     <color name="statusBarDarkMode">#FF51dbcc</color>
+
+    <color name="colorPrimary">#D81F26</color>
+    <color name="dark_gray">#FF54555A</color>
+    <color name="light_gray">#FF696969</color>
+
+    <color name="transparent">#4D000000</color>
 </resources>
