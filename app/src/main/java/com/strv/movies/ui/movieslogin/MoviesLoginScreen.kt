@@ -30,10 +30,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.strv.movies.R
+import com.strv.movies.ui.navigation.MoviesDestinations
 
 @Composable
-fun MoviesLogin() {
+fun MoviesLogin(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         Box(
@@ -52,7 +54,7 @@ fun MoviesLogin() {
         ) {
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                 TwoPartText()
-                EmailLogin()
+                EmailLogin(navController = navController)
                 OrContinueWith()
                 NewRegister()
             }
@@ -130,7 +132,7 @@ fun TwoPartText(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EmailLogin(modifier: Modifier = Modifier) {
+fun EmailLogin(modifier: Modifier = Modifier, navController: NavController) {
     Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
 
         val textEmailAdress = remember { mutableStateOf(TextFieldValue()) }
@@ -207,7 +209,7 @@ fun EmailLogin(modifier: Modifier = Modifier) {
         }
 
         Button(
-            onClick = { /*TODO*/ }, modifier = modifier
+            onClick = { navController.navigate(MoviesDestinations.MOVIES_LIST_ROUTE) }, modifier = modifier
                 .padding(top = 30.dp, bottom = 34.dp, start = 32.dp, end = 32.dp)
                 .fillMaxWidth()
                 .height(60.dp),
