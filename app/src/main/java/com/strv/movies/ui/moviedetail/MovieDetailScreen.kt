@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -29,12 +32,16 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.strv.movies.R
 import com.strv.movies.data.OfflineMoviesProvider
 import com.strv.movies.model.MovieDetail
+import com.strv.movies.ui.darklightmodeswitchicon.DarkLightModeSwitchIcon
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
 
 @Composable
 fun MovieDetailScreen(
-    viewModel: MovieDetailViewModel = viewModel()
+    navController: NavController,
+    viewModel: MovieDetailViewModel = viewModel(),
+    isDarkTheme: Boolean,
+    changeTheme: (isDarkTheme: Boolean) -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -45,9 +52,12 @@ fun MovieDetailScreen(
     } else {
         viewState.movie?.let {
             MovieDetail(
+                navController = navController,
                 movie = it,
                 videoProgress = viewState.videoProgress,
-                setVideoProgress = viewModel::updateVideoProgress
+                setVideoProgress = viewModel::updateVideoProgress,
+                isDarkTheme = isDarkTheme,
+                changeTheme = changeTheme
             )
         }
     }
@@ -55,11 +65,33 @@ fun MovieDetailScreen(
 
 @Composable
 fun MovieDetail(
+    navController: NavController,
     movie: MovieDetail,
     videoProgress: Float = 0f,
-    setVideoProgress: (second: Float) -> Unit
+    setVideoProgress: (second: Float) -> Unit,
+    isDarkTheme: Boolean,
+    changeTheme: (isDarkTheme: Boolean) -> Unit
 ) {
     Column {
+        TopAppBar(
+            title = {
+                Text(text = stringResource(id = R.string.app_name))
+            },
+            backgroundColor = MaterialTheme.colors.primary,
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            },
+            actions = { DarkLightModeSwitchIcon(
+                isDarkTheme = isDarkTheme,
+                changeTheme = changeTheme
+            )
+            }
+        )
         Log.d("TAG", "MovieDetail: $videoProgress")
 
         MovieTrailerPlayer(

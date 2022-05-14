@@ -47,7 +47,12 @@ fun MoviesNavGraph(
                 }
             )
         ) {
-            MovieDetailScreen(viewModel = hiltViewModel())
+            MovieDetailScreen(
+                navController = navController,
+                isDarkTheme = isDarkTheme,
+                changeTheme = changeTheme,
+                viewModel = hiltViewModel()
+            )
         }
     }
 }
