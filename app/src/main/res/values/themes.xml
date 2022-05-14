@@ -2,7 +2,21 @@
 <resources>
 
     <style name="Theme.Movies" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/statusBar</item>
+
+
+        <item name="android:navigationBarColor">
+            @android:color/transparent
+        </item>
+
+        <!-- Optional: set to transparent if your app is drawing behind the status bar. -->
+        <item name="android:statusBarColor">
+            @color/transparent
+        </item>
+
+        <!-- Optional: set the status bar light and content dark. -->
+
+        <item name="android:windowLightStatusBar">false</item>
+
     </style>
 
 </resources>

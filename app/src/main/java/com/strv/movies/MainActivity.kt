@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.strv.movies.extension.assistedViewModel
 import com.strv.movies.ui.navigation.MoviesNavGraph
@@ -37,13 +38,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             val viewModel by assistedViewModel {
                 mainViewModelFactory.create(it, isSystemInDarkTheme())
             }
 
             val isDarkTheme by viewModel.isDarkTheme.collectAsState()
-            changeStatusBarColor(isDarkTheme)
+//            changeStatusBarColor(isDarkTheme)
 
             MoviesTheme(useDarkTheme = isDarkTheme) {
                 // A surface container using the 'background' color from the theme
@@ -60,10 +63,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun changeStatusBarColor(isDarkMode: Boolean) {
+    /*private fun changeStatusBarColor(isDarkMode: Boolean) {
         val color = if (isDarkMode) R.color.statusBarDarkMode else R.color.statusBarLightMode
         window.statusBarColor = resources.getColor(color, this@MainActivity.theme)
-    }
+    }*/
 }
 
 @Composable

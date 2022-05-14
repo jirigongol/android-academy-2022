@@ -31,7 +31,6 @@ fun MoviesNavGraph(
             MoviesListScreen(
                 isDarkTheme = isDarkTheme,
                 changeTheme = changeTheme,
-                navController = navController,
                 navigateToMovieDetail = { movieId ->
                     navController.navigate("${MoviesDestinations.MOVIE_DETAIL_ROUTE}/$movieId")
                 },

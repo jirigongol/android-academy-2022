@@ -7,15 +7,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,18 +23,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.strv.movies.R
 import com.strv.movies.model.Movie
 import com.strv.movies.ui.darklightmodeswitchicon.DarkLightModeSwitchIcon
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
-import com.strv.movies.ui.navigation.MoviesNavGraph
 
 @Composable
 fun MoviesListScreen(
-    navController: NavController,
     navigateToMovieDetail: (movieId: Int) -> Unit,
     viewModel: MoviesListViewModel = viewModel(),
     isDarkTheme: Boolean,
@@ -50,7 +45,6 @@ fun MoviesListScreen(
         ErrorScreen(errorMessage = viewState.error!!)
     } else {
         MoviesList(
-            navController = navController,
             movies = viewState.movies,
             onMovieClick = navigateToMovieDetail,
             isDarkTheme = isDarkTheme,
@@ -75,33 +69,31 @@ fun MovieItem(movie: Movie, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun MoviesList(
-    navController: NavController,
     movies: List<Movie>,
     onMovieClick: (movieId: Int) -> Unit,
     isDarkTheme: Boolean,
-    changeTheme: (isDarkTheme: Boolean) -> Unit
+    changeTheme: (isDarkTheme: Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column {
+        Spacer(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .background(MaterialTheme.colors.primary)
+        )
         TopAppBar(
             title = {
                 Text(text = stringResource(id = R.string.app_name))
             },
             backgroundColor = MaterialTheme.colors.primary,
-            navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
-                    )
-                }
-            },
             actions = { DarkLightModeSwitchIcon(
                 isDarkTheme = isDarkTheme,
                 changeTheme = changeTheme
             )}
         )
         LazyVerticalGrid(
-            modifier = Modifier.padding(8.dp),
+            modifier = modifier.padding(8.dp),
             cells = GridCells.Fixed(2)
         ) {
             items(movies) { movie ->
@@ -117,7 +109,7 @@ fun MoviesList(
                 ) {
                     MovieItem(
                         movie = movie,
-                        modifier = Modifier
+                        modifier = modifier
                             .animateItemPlacement()
                             .clickable { onMovieClick(movie.id) }
                     )

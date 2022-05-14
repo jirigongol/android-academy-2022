@@ -2,10 +2,8 @@ package com.strv.movies.ui.moviedetail
 
 import android.content.res.Configuration
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -70,9 +68,16 @@ fun MovieDetail(
     videoProgress: Float = 0f,
     setVideoProgress: (second: Float) -> Unit,
     isDarkTheme: Boolean,
-    changeTheme: (isDarkTheme: Boolean) -> Unit
+    changeTheme: (isDarkTheme: Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column {
+    Column() {
+        Spacer(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(24.dp)
+                .background(MaterialTheme.colors.primary)
+        )
         TopAppBar(
             title = {
                 Text(text = stringResource(id = R.string.app_name))
