@@ -9,11 +9,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.strv.movies.extension.assistedViewModel
 import com.strv.movies.ui.navigation.MoviesNavGraph
 import com.strv.movies.ui.theme.MoviesTheme
@@ -52,51 +51,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Column {
-                        TopAppBar(
-                            title = {
-                                Text(text = stringResource(id = R.string.app_name))
-                            },
-                            backgroundColor = MaterialTheme.colors.primary,
-                            actions = {
-                                DarkLightModeSwitchIcon(
-                                    isDarkTheme = isDarkTheme,
-                                    changeTheme = viewModel::changeTheme
-                                )
-                            }
-                        )
-                        MoviesNavGraph()
-                    }
+                    MoviesNavGraph(
+                        isDarkTheme = isDarkTheme,
+                        changeTheme = viewModel::changeTheme
+                    )
                 }
             }
         }
-    }
-
-    @Composable
-    private fun DarkLightModeSwitchIcon(
-        isDarkTheme: Boolean,
-        changeTheme: (isDarkTheme: Boolean) -> Unit
-    ) {
-        Icon(
-            modifier = Modifier
-                .padding(end = 12.dp)
-                .clickable(
-                    interactionSource = remember {
-                        MutableInteractionSource()
-                    },
-                    indication = rememberRipple(bounded = false),
-                ) {
-                    changeTheme(!isDarkTheme)
-                },
-            painter = painterResource(
-                id = if (isDarkTheme) {
-                    R.drawable.ic_light
-                } else {
-                    R.drawable.ic_dark
-                }
-            ),
-            contentDescription = null,
-        )
     }
 
     private fun changeStatusBarColor(isDarkMode: Boolean) {
