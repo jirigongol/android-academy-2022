@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.strv.movies.ui.moviedetail.MovieDetailScreen
 import com.strv.movies.ui.movieslist.MoviesListScreen
 import com.strv.movies.ui.movieslogin.MoviesLogin
+import com.strv.movies.ui.movieslogin.MoviesLoginScreen
 
 @Composable
 fun MoviesNavGraph(
@@ -24,7 +25,7 @@ fun MoviesNavGraph(
         startDestination = MoviesDestinations.MOVIES_LOGIN_ROUTE
     ) {
         composable(route = MoviesDestinations.MOVIES_LOGIN_ROUTE) {
-            MoviesLogin(navController = navController)
+            MoviesLoginScreen(navController = navController)
         }
 
         composable(route = MoviesDestinations.MOVIES_LIST_ROUTE) {

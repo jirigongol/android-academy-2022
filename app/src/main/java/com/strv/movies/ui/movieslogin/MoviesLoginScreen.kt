@@ -30,9 +30,31 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.strv.movies.R
+import com.strv.movies.ui.error.ErrorScreen
+import com.strv.movies.ui.loading.LoadingScreen
+import com.strv.movies.ui.moviedetail.MovieDetail
 import com.strv.movies.ui.navigation.MoviesDestinations
+
+@Composable
+fun MoviesLoginScreen(
+    viewModel: MoviesLoginViewModel = viewModel(),
+    navController: NavController,
+) {
+    val viewState by viewModel.viewState.collectAsState()
+
+    if (viewState.loading) {
+        LoadingScreen()
+    } else if (viewState.error != null) {
+        ErrorScreen(errorMessage = viewState.error!!)
+
+    } else {
+        MoviesLogin(navController = navController)
+    }
+}
 
 @Composable
 fun MoviesLogin(navController: NavController) {
@@ -209,7 +231,8 @@ fun EmailLogin(modifier: Modifier = Modifier, navController: NavController) {
         }
 
         Button(
-            onClick = { navController.navigate(MoviesDestinations.MOVIES_LIST_ROUTE) }, modifier = modifier
+            onClick = { navController.navigate(MoviesDestinations.MOVIES_LIST_ROUTE) },
+            modifier = modifier
                 .padding(top = 30.dp, bottom = 34.dp, start = 32.dp, end = 32.dp)
                 .fillMaxWidth()
                 .height(60.dp),
