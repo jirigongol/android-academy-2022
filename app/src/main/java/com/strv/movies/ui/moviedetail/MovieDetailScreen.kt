@@ -133,7 +133,7 @@ fun MovieInfo(movie: MovieDetail) {
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
-        Text(movie.releaseDate, modifier = Modifier.padding(top = 8.dp))
+        Text(movie.releaseYear, modifier = Modifier.padding(top = 8.dp))
         Text(
             movie.overview,
             modifier = Modifier.padding(top = 8.dp, end = 16.dp),
