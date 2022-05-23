@@ -28,10 +28,10 @@ class MovieRepository @Inject constructor(
 
     }
 
-    suspend fun getMovieVideo(movieId: Int): Either<String, Video> {
+    suspend fun getMovieVideo(movieId: Int): Either<String, List<Video>> {
         return try {
             val video = api.getMovieVideo(movieId = movieId)
-            Either.Value(movieVideoMapper.map(video))
+            Either.Value(video.results.map { movieVideoMapper.map(it) })
         } catch (exception: Throwable) {
             Either.Error(exception.localizedMessage?: "Network error")
         }
