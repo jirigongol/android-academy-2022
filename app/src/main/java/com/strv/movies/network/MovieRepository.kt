@@ -2,10 +2,11 @@ package com.strv.movies.network
 
 import com.strv.movies.data.MovieDetailMapper
 import com.strv.movies.data.MovieMapper
+import com.strv.movies.data.MovieVideoMapper
 import com.strv.movies.extension.Either
 import com.strv.movies.model.Movie
 import com.strv.movies.model.MovieDetail
-import com.strv.movies.model.MovieDetailDTO
+import com.strv.movies.model.Video
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,13 +14,24 @@ import javax.inject.Singleton
 class MovieRepository @Inject constructor(
     private val api: MovieApi,
     private val movieDetailMapper: MovieDetailMapper,
-    private val movieMapper: MovieMapper
+    private val movieMapper: MovieMapper,
+    private val movieVideoMapper: MovieVideoMapper
 ) {
 
     suspend fun getMovieDetail(movieId: Int): Either<String, MovieDetail> {
         return try {
             val movie = api.getMovieDetail(movieId = movieId)
             Either.Value(movieDetailMapper.map(movie))
+        } catch (exception: Throwable) {
+            Either.Error(exception.localizedMessage?: "Network error")
+        }
+
+    }
+
+    suspend fun getMovieVideo(movieId: Int): Either<String, Video> {
+        return try {
+            val video = api.getMovieVideo(movieId = movieId)
+            Either.Value(movieVideoMapper.map(video))
         } catch (exception: Throwable) {
             Either.Error(exception.localizedMessage?: "Network error")
         }
