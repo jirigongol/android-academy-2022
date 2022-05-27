@@ -1,6 +1,5 @@
 package com.strv.movies.ui.movieslogin
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,18 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.strv.movies.R
 import com.strv.movies.ui.error.ErrorScreen
 import com.strv.movies.ui.loading.LoadingScreen
-import com.strv.movies.ui.moviedetail.MovieDetail
-import com.strv.movies.ui.navigation.MoviesDestinations
 
 @Composable
 fun MoviesLoginScreen(
     viewModel: MoviesLoginViewModel = viewModel(),
-    navController: NavController,
+    navigateToMovieList: () -> Unit
 ) {
     val viewState by viewModel.viewState.collectAsState()
 
@@ -52,12 +47,12 @@ fun MoviesLoginScreen(
         ErrorScreen(errorMessage = viewState.error!!)
 
     } else {
-        MoviesLogin(navController = navController)
+        MoviesLogin(navigateToMovieList = navigateToMovieList)
     }
 }
 
 @Composable
-fun MoviesLogin(navController: NavController) {
+fun MoviesLogin(navigateToMovieList: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         Box(
@@ -76,7 +71,7 @@ fun MoviesLogin(navController: NavController) {
         ) {
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                 TwoPartText()
-                EmailLogin(navController = navController)
+                EmailLogin(navigateToMovieList = navigateToMovieList)
                 OrContinueWith()
                 NewRegister()
             }
@@ -154,7 +149,10 @@ fun TwoPartText(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EmailLogin(modifier: Modifier = Modifier, navController: NavController) {
+fun EmailLogin(
+    modifier: Modifier = Modifier,
+    navigateToMovieList: () -> Unit
+) {
     Column(modifier = modifier, horizontalAlignment = Alignment.Start) {
 
         val textEmailAdress = remember { mutableStateOf(TextFieldValue()) }
@@ -217,7 +215,7 @@ fun EmailLogin(modifier: Modifier = Modifier, navController: NavController) {
 
         )
 
-        Row() {
+        Row(modifier = modifier) {
             Spacer(modifier = modifier.weight(1f))
             Text(
                 modifier = Modifier
@@ -231,7 +229,7 @@ fun EmailLogin(modifier: Modifier = Modifier, navController: NavController) {
         }
 
         Button(
-            onClick = { navController.navigate(MoviesDestinations.MOVIES_LIST_ROUTE) },
+            onClick = navigateToMovieList,
             modifier = modifier
                 .padding(top = 30.dp, bottom = 34.dp, start = 32.dp, end = 32.dp)
                 .fillMaxWidth()

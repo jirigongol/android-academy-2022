@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -36,7 +35,7 @@ import com.strv.movies.ui.loading.LoadingScreen
 
 @Composable
 fun MovieDetailScreen(
-    navController: NavController,
+    navigateBack: () -> Unit,
     viewModel: MovieDetailViewModel = viewModel(),
     isDarkTheme: Boolean,
     changeTheme: (isDarkTheme: Boolean) -> Unit
@@ -50,7 +49,7 @@ fun MovieDetailScreen(
     } else {
         viewState.movie?.let {
             MovieDetail(
-                navController = navController,
+                navigateBack = navigateBack,
                 movie = it,
                 videoProgress = viewState.videoProgress,
                 setVideoProgress = viewModel::updateVideoProgress,
@@ -63,15 +62,15 @@ fun MovieDetailScreen(
 
 @Composable
 fun MovieDetail(
-    navController: NavController,
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
     movie: MovieDetail,
     videoProgress: Float = 0f,
     setVideoProgress: (second: Float) -> Unit,
     isDarkTheme: Boolean,
-    changeTheme: (isDarkTheme: Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    changeTheme: (isDarkTheme: Boolean) -> Unit
 ) {
-    Column() {
+    Column(modifier = modifier) {
         Spacer(
             modifier = modifier
                 .fillMaxWidth()
@@ -84,17 +83,18 @@ fun MovieDetail(
             },
             backgroundColor = MaterialTheme.colors.primary,
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = navigateBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
             },
-            actions = { DarkLightModeSwitchIcon(
-                isDarkTheme = isDarkTheme,
-                changeTheme = changeTheme
-            )
+            actions = {
+                DarkLightModeSwitchIcon(
+                    isDarkTheme = isDarkTheme,
+                    changeTheme = changeTheme
+                )
             }
         )
         Log.d("TAG", "MovieDetail: $videoProgress")
