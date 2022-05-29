@@ -46,7 +46,7 @@ fun MovieDetailScreen(
         viewState.movie?.let {
             MovieDetail(
                 movie = it,
-                video = viewState.video,
+                videos = viewState.video,
                 videoProgress = viewState.videoProgress,
                 setVideoProgress = viewModel::updateVideoProgress
             )
@@ -57,18 +57,20 @@ fun MovieDetailScreen(
 @Composable
 fun MovieDetail(
     movie: MovieDetail,
-    video: List<Video>,
+    videos: Video?,
     videoProgress: Float = 0f,
     setVideoProgress: (second: Float) -> Unit
 ) {
     Column {
-        Log.d("TAG", "MovieDetail: ${video.first()}")
+        Log.d("TAG", "MovieDetail: $videoProgress")
 
-        MovieTrailerPlayer(
-            videoId = video.first().key,
-            progressSeconds = videoProgress,
-            setProgress = setVideoProgress
-        )
+        if (videos?.key != null) {
+            MovieTrailerPlayer(
+                videoId = videos.key,
+                progressSeconds = videoProgress,
+                setProgress = setVideoProgress
+            )
+        }
 
         Row {
             MoviePoster(movie = movie)

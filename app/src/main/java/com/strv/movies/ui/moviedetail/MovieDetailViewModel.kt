@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.strv.movies.extension.Either
 import com.strv.movies.extension.fold
 import com.strv.movies.network.MovieRepository
 import com.strv.movies.ui.navigation.MoviesNavArguments
@@ -32,50 +33,47 @@ class MovieDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val movieVideoDeferred = async { fetchMovieVideo() }
-            val movieDetailDeferred = async { fetchMovieDetail() }
+            val movieDetail = async { movieRepository.getMovieDetail(movieId) }
+            val videos = async { movieRepository.getMovieVideo(movieId) }
 
-            movieDetailDeferred.await()
-            movieVideoDeferred.await()
-        }
-    }
+            val movieDetailResponse = movieDetail.await()
+            val videosResponse = videos.await()
 
-    private suspend fun fetchMovieDetail() {
-            movieRepository.getMovieDetail(movieId).fold(
-                { error ->
+            // We want to show error if we do not get movie detail. If trailer is not there, we can just hide it.
+            when (movieDetailResponse) {
+                is Either.Error -> {
+                    // Here we use smart cast, so no need to .fold() here. We already checked the type in this WHEN branch.
+                    val error = movieDetailResponse.error
                     Log.d("TAG", "MovieDetailLoadingError: $error")
                     _viewState.update {
                         MovieDetailViewState(
-                            error = error
+                            error = error // MovieDetail is crucial for this screen, set error.
                         )
                     }
-                },
-                { movie ->
-                    Log.d("TAG", "MovieDetailSuccess: ${movie.title}")
-                    _viewState.update {
-                            it.copy(movie = movie, loading = false)
-
-                    }
                 }
-            )
-    }
-
-    private suspend fun fetchMovieVideo() {
-        Log.e("TAG", "MovieVideo - Start fetching data.")
-        movieRepository.getMovieVideo(movieId).fold(
-            { error ->
-                Log.e("TAG", "MovieError: $error")
-                _viewState.update {
-                    MovieDetailViewState(error = error)
-                }
-            },
-            { video ->
-                Log.e("TAG", "MovieSuccess: ")
-                _viewState.update {
-                    it.copy(video = video, loading = false)
+                is Either.Value -> {
+                    videosResponse.fold(
+                        { error ->
+                            Log.d("TAG", "MovieTrailerLoadingError: $error")
+                            _viewState.update {
+                                MovieDetailViewState(
+                                    movie = movieDetailResponse.value // We do not care about this error too much
+                                )
+                            }
+                        },
+                        { videosList ->
+                            Log.d("TAG", "MovieTrailerSuccess: ${videosList.size}")
+                            _viewState.update {
+                                MovieDetailViewState(
+                                    movie = movieDetailResponse.value,
+                                    video = videosList.first()
+                                )
+                            }
+                        }
+                    )
                 }
             }
-        )
+        }
     }
 
     fun updateVideoProgress(progress: Float) {
